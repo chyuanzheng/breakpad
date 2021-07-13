@@ -37,7 +37,7 @@
 #include <stdlib.h>
 
 #if !defined(__ANDROID__)
-#include <cxxabi.h>
+//#include <cxxabi.h>
 #endif
 
 #if defined(HAVE_RUST_DEMANGLE)
@@ -81,29 +81,8 @@ class CPPLanguage: public Language {
 #else
     // Attempting to demangle non-C++ symbols with the C++ demangler would print
     // warnings and fail, so return kDontDemangle for these.
-    if (!IsMangledName(mangled)) {
-      demangled->clear();
-      return kDontDemangle;
-    }
-
-    int status;
-    char* demangled_c =
-        abi::__cxa_demangle(mangled.c_str(), NULL, NULL, &status);
-
-    DemangleResult result;
-    if (status == 0) {
-      result = kDemangleSuccess;
-      demangled->assign(demangled_c);
-    } else {
-      result = kDemangleFailure;
-      demangled->clear();
-    }
-
-    if (demangled_c) {
-      free(reinterpret_cast<void*>(demangled_c));
-    }
-
-    return result;
+	  demangled->clear();
+	  return kDontDemangle;
 #endif
   }
 

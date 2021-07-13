@@ -470,7 +470,7 @@ bool MinidumpContext::Read(uint32_t expected_size) {
   // First, figure out what type of CPU this context structure is for.
   // For some reason, the AMD64 Context doesn't have context_flags
   // at the beginning of the structure, so special case it here.
-  if (expected_size == sizeof(MDRawContextAMD64)) {
+  if (1) {
     BPLOG(INFO) << "MinidumpContext: looks like AMD64 context";
 
     scoped_ptr<MDRawContextAMD64> context_amd64(new MDRawContextAMD64());

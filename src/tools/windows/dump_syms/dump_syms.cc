@@ -34,7 +34,7 @@
 #include <wchar.h>
 
 #include <string>
-
+#include <memory>
 #include "common/windows/pdb_source_line_writer.h"
 #include "common/windows/pe_source_line_writer.h"
 
@@ -51,10 +51,24 @@ int wmain(int argc, wchar_t** argv) {
       fprintf(stderr, "Open failed.\n");
       return 1;
     }
-    success = pdb_writer.WriteSymbols(stdout);
+	fprintf(stdout, "dfdfd");
+	wchar_t szPath[MAX_PATH];
+	FILE *fp = nullptr;
+	success = GetCurrentDirectory(MAX_PATH, szPath);
+
+	wstring strPath = szPath;
+	strPath += L"\\";
+	strPath += argv[1];
+	strPath += L".txt";
+
+	fp = _wfopen(strPath.c_str(), L"w");
+	success = pdb_writer.WriteSymbols(fp);
+	fclose(fp);
+    
   } else if (argc == 3 && wcscmp(argv[1], L"--pe") == 0) {
     PESourceLineWriter pe_writer(argv[2]);
-    success = pe_writer.WriteSymbols(stdout);
+	success = pe_writer.WriteSymbols(stdout);
+    
   } else {
     fprintf(stderr, "Usage: %ws [--pe] <file.[pdb|exe|dll]>\n", argv[0]);
     fprintf(stderr, "Options:\n");

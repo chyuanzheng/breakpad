@@ -153,28 +153,9 @@ SymbolSupplier::SymbolResult SimpleSymbolSupplier::GetSymbolFileAtPathFromRoot(
   // Start with the base path.
   string path = root_path;
 
-  // Append the debug (pdb) file name as a directory name.
-  path.append("/");
-  string debug_file_name = PathnameStripper::File(module->debug_file());
-  if (debug_file_name.empty()) {
-    BPLOG(ERROR) << "Can't construct symbol file path without debug_file "
-                    "(code_file = " <<
-                    PathnameStripper::File(module->code_file()) << ")";
-    return NOT_FOUND;
-  }
-  path.append(debug_file_name);
 
-  // Append the identifier as a directory name.
-  path.append("/");
-  string identifier = module->debug_identifier();
-  if (identifier.empty()) {
-    BPLOG(ERROR) << "Can't construct symbol file path without debug_identifier "
-                    "(code_file = " <<
-                    PathnameStripper::File(module->code_file()) <<
-                    ", debug_file = " << debug_file_name << ")";
-    return NOT_FOUND;
-  }
-  path.append(identifier);
+  string debug_file_name = PathnameStripper::File(module->debug_file());
+  
 
   // Transform the debug file name into one ending in .sym.  If the existing
   // name ends in .pdb, strip the .pdb.  Otherwise, add .sym to the non-.pdb
